@@ -1,0 +1,440 @@
+# Copyright (c) 2013-2014, 2017, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+
+###<BEGIN>[EMKIT]###
+import /init.solution.rc
+###< END >[EMKIT]###
+
+import init.carrier.rc
+
+on early-init
+    mkdir /firmware 0771 system system
+    mkdir /system 0777 root root
+    symlink /data/tombstones /tombstones
+#add begin, add oempersist partition, by xiaozhan.gan
+    mkdir /oempersist 0771 system system
+#add end
+
+on fs
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    mount_all /vendor/etc/fstab.qcom
+    write /proc/sys/vm/swappiness 100
+
+    # Keeping following partitions outside fstab file. As user may not have
+    # these partition flashed on the device. Failure to mount any partition in fstab file
+    # results in failure to launch late-start class.
+
+    wait /dev/block/bootdevice/by-name/cache
+    mount ext4 /dev/block/bootdevice/by-name/cache /cache noatime nosuid nodev barrier=1
+
+    wait /dev/block/bootdevice/by-name/persist
+    mount ext4 /dev/block/bootdevice/by-name/persist /persist noatime nosuid nodev barrier=1
+    mkdir /persist/data 0700 system system
+    restorecon_recursive /persist
+
+    wait /dev/block/bootdevice/by-name/modem
+    mount vfat /dev/block/bootdevice/by-name/modem /firmware ro context=u:object_r:firmware_file:s0,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
+    #write /sys/kernel/boot_adsp/boot 1
+
+    wait /dev/block/bootdevice/by-name/oem
+    mount ext4 /dev/block/bootdevice/by-name/oem /oem ro nosuid nodev barrier=1
+
+#add begin, add oempersist partition, by xiaozhan.gan
+    wait /dev/block/bootdevice/by-name/oempersist
+    mount ext4 /dev/block/bootdevice/by-name/oempersist /oempersist nosuid nodev noatime barrier=1
+    restorecon_recursive /oempersist
+    chown system oempersist /oempersist
+    chmod 0771 /oempersist
+#add end
+
+
+    #[FEATURE]-Add-BEGIN by T2M.jiaming.ding, 2018-05-30,[Task6359501]BT test mode
+    chown system system /persist/wl
+    #[FEATURE]-Add-END by T2M.jiaming.ding
+
+on post-fs-data
+    mkdir /data/tombstones 0771 system system
+    mkdir /tombstones/modem 0771 system system
+    mkdir /tombstones/lpass 0771 system system
+    mkdir /tombstones/wcnss 0771 system system
+    mkdir /tombstones/dsps 0771 system system
+    mkdir /persist/data/sfs 0700 system system
+    mkdir /persist/data/tz 0700 system system
+    mkdir /data/misc/dts 0770 media audio
+#Create folder for mm-qcamera-daemon
+    mkdir /data/vendor/camera 0770 camera camera
+# [12147] andy.kim - Add Special folder (/data/oem) for Customer System App
+    mkdir /data/oem 0774 system system
+    mkdir /data/plogd 0771 system system
+    mkdir /data/plogd/logcat 0771 system system
+    mkdir /data/oemlog 0771 system system
+
+#start camera server as daemon
+service qcamerasvr /system/vendor/bin/mm-qcamera-daemon
+    class late_start
+    user camera
+    group camera system inet input graphics
+
+on init
+   write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
+
+# Allow usb charging to be disabled peristently
+on property:persist.usb.chgdisabled=1
+    write /sys/class/power_supply/battery/charging_enabled 0
+
+on property:persist.usb.chgdisabled=0
+    write /sys/class/power_supply/battery/charging_enabled 1
+
+#added by wang xiaoman for task:6365024, key provision
+on property:ro.serialno=*
+   setprop ro.fscsvr ${ro.serialno}
+   setprop ro.tct.btname ${ro.serialno}
+
+on post-fs-data
+   mkdir /data/fscsvr 0770 system shell
+#added end by wang xiaoman
+
+service qrngd /system/bin/qrngd -f
+   class main
+   user root
+   group root
+
+service qrngp /system/bin/qrngp -f
+   class main
+   user root
+   group root
+   oneshot
+   disabled
+
+on property:sys.boot_completed=1
+   start qrngp
+
+service qseecomd /vendor/bin/qseecomd
+   class core
+   user root
+   group root
+
+service perfd /system/vendor/bin/perfd
+   class main
+   user root
+   disabled
+
+service thermal-engine /system/vendor/bin/thermal-engine
+   class main
+   user root
+   socket thermal-send-client stream 0666 system system
+   socket thermal-recv-client stream 0660 system system
+   socket thermal-recv-passive-client stream 0666 system system
+   socket thermal-send-rule stream 0660 system system
+   group root
+
+service time_daemon /system/vendor/bin/time_daemon
+   class late_start
+   user root
+   group root
+
+service audiod /system/vendor/bin/audiod
+   class late_start
+   user system
+   group system
+
+on charger
+   wait /dev/block/bootdevice/by-name/system
+   mount ext4 /dev/block/bootdevice/by-name/system /system ro barrier=1
+   chown root system /sys/class/power_supply/bms/current_now
+   chown root system /sys/class/power_supply/bms/voltage_ocv
+   chmod 0664 /sys/class/power_supply/bms/current_now
+   chmod 0664 /sys/class/power_supply/bms/voltage_ocv
+   start vm_bms
+   load_all_props
+   start qcom-post-boot
+
+on boot
+    start rmt_storage
+    insmod /system/lib/modules/adsprpc.ko
+    # Add begin by yantao.song for task 6139763
+    chown system system /sys/class/sensors/mc3xxx-accel/enable
+    # Add end by yantao.song for task 6139763
+
+    #+ jason.kim 2018.4.13
+    chown system system /sys/class/leds/r,noti/brightness
+    chown system system /sys/class/leds/r,noti/on_off_ms
+    chown system system /sys/class/leds/g,noti/brightness
+    chown system system /sys/class/leds/g,noti/on_off_ms
+    chown system system /sys/class/leds/b,noti/brightness
+    chown system system /sys/class/leds/b,noti/on_off_ms
+
+    chown system system /sys/class/leds/r,charging/brightness
+    chown system system /sys/class/leds/r,charging/on_off_ms
+    chown system system /sys/class/leds/g,charging-done/brightness
+    chown system system /sys/class/leds/g,charging-done/on_off_ms
+    chown system system /sys/class/leds/b,notused/brightness
+    chown system system /sys/class/leds/b,notused/on_off_ms
+
+    chown system system /sys/class/leds/scan,failed/brightness
+    chown system system /sys/class/leds/scan,failed/on_ms
+    chown system system /sys/class/leds/scan,failed/on
+    chown system system /sys/class/leds/scan,succeed/brightness
+    chown system system /sys/class/leds/scan,succeed/on_ms
+    chown system system /sys/class/leds/scan,succeed/on
+    chmod 0664 /sys/class/leds/scan,failed/brightness
+    chmod 0664 /sys/class/leds/scan,failed/on_ms
+    chmod 0664 /sys/class/leds/scan,failed/on
+    chmod 0664 /sys/class/leds/scan,succeed/brightness
+    chmod 0664 /sys/class/leds/scan,succeed/on_ms
+    chmod 0664 /sys/class/leds/scan,succeed/on
+
+    chown system system /sys/class/leds/srled/brightness
+
+    chown system system /sys/class/leds/keypad-bl/brightness
+    #- jason.kim 2018.4.13
+
+    chmod 0664 /sys/class/power_supply/backup_battery/charge_enable
+    chown system system /sys/class/power_supply/backup_battery/charge_enable
+    chmod 0664 /sys/class/power_supply/battery/charging_enabled
+    chown system system /sys/class/power_supply/battery/charging_enabled
+    chmod 0664 /sys/class/power_supply/battery/usb_charging_enabled
+    chown system system /sys/class/power_supply/battery/usb_charging_enabled
+
+    #+(2018.05.25 Richard.Yoo) Enabled Charging LED in charger mode
+    chmod 0664 /sys/class/leds/r,charging/brightness
+    chmod 0664 /sys/class/leds/g,charging-done/brightness
+    #-(2018.05.25 Richard.Yoo) Enabled Charging LED in charger mode
+
+    #+(2018.05.28 Richard.Yoo) Move add permision from init.rc to init.target.rc
+    #+(2018.04.19 Richard.Yoo) Add for Hot Swap
+    chown system system /sys/class/power_supply/hot_swap/hot_swap
+    chmod 0666 /sys/class/power_supply/hot_swap/hot_swap
+
+    chmod 0666 /sys/info/boot_ind
+    #-(2018.04.19 Richard.Yoo) Add for Hot Swap
+
+    #+(2018.07.18 Richard.Yoo)
+    #[issue #12341] PowerMenu / Hotswap Message
+    chown system system /sys/class/power_supply/hot_swap/hot_swap_completed
+    chmod 0666 /sys/class/power_supply/hot_swap/hot_swap_completed
+    #-(2018.07.18 Richard.Yoo)
+
+    #+(2018.05.16 Richard.Yoo) change mode usb_switch_to_cradle
+    chown system system /sys/class/power_supply/battery/usb_switch_to_cradle
+    chmod 0666 /sys/class/power_supply/battery/usb_switch_to_cradle
+    #-(2018.05.16 Richard.Yoo) change mode usb_switch_to_cradle
+    #-(2018.05.28 Richard.Yoo) Move add permision from init.rc to init.target.rc
+
+    chmod 0664 /sys/devices/virtual/graphics/fb0/debug_backlight
+    chown system graphics /sys/devices/virtual/graphics/fb0/debug_backlight
+    chmod 0664 /sys/devices/virtual/graphics/fb0/msm_fb_hotswap_mode
+
+    #+(2018.07.31 Richard.Yoo)
+    #[issue #12161] Operation Restriction
+    #If the battery level is less than 10% (Critical), LED flashlight and Camera Flash are restricted to use.
+    chmod 0666 /sys/info/batt_critical
+    chown system system /sys/info/batt_critical
+    #-(2018.07.31 Richard.Yoo)
+
+    #+(2018.10.11 Richard.Yoo)
+    #[issue #12534] temperature blinking at low temperature
+    #Limit camera flash function when the battery temp is lower than -11 degree.
+    chmod 0666 /sys/info/low_temp_camera
+    chown system system /sys/info/low_temp_camera
+    #-(2018.10.11 Richard.Yoo)
+
+    #2018.8.8 gsensor op restriction
+    chmod 0666 /sys/class/sensors/mc3xxx-accel/poll_delay
+    chown system system  /sys/class/sensors/mc3xxx-accel/poll_delay
+    #2018.8.8 xiongfei.yang
+
+    #+(2018.10.19 Richard.Yoo) change mode gpio key enable_wakeup/disable_wakeup
+    chmod 0666 /sys/devices/platform/gpio-keys/enable_wakeup
+    chmod 0666 /sys/devices/platform/gpio-keys/disable_wakeup
+    chown system system /sys/devices/platform/gpio-keys/enable_wakeup
+    chown system system /sys/devices/platform/gpio-keys/disable_wakeup
+    #-(2018.10.19 Richard.Yoo) change mode gpio key enable_wakeup/disable_wakeup
+
+    #+(2018.11.01 Richard.Yoo)
+    #[issue #13324] [ALM:7069741][Hot swap] When trying hot swap with the Wi-Fi connected and LTE SIM inserted, the device is power off.
+    #Added to change cpu max clock to 400Mz when entering hot swap.
+    chown system system /sys/module/msm_thermal/core_control/set_hot_swap_freq
+    chmod 0660 /sys/module/msm_thermal/core_control/set_hot_swap_freq
+    #-(2018.11.01 Richard.Yoo)
+
+    chown system system /sys/class/input/input2/device/reg
+    chown system system /sys/class/input/input2/device/data
+    chown system system /sys/class/input/input2/device/len
+    chown system system /sys/class/input/input2/device/read
+    chown system system /sys/class/input/input2/device/write
+    chown system system /sys/class/input/input2/device/evrx
+    chown system system /sys/class/input/input2/device/evry
+    chown system system /sys/class/input/input2/device/pxmax
+    chown system system /sys/class/input/input2/device/pymax
+    chown system system /sys/class/input/input2/device/calibration
+    chown system system /sys/class/input/input2/device/alignmaxx
+    chown system system /sys/class/input/input2/device/alignmaxy
+    chown system system /sys/class/input/input2/device/alignminx
+    chown system system /sys/class/input/input2/device/alignminy
+    chown system system /sys/class/input/input2/device/coordinatex
+    chown system system /sys/class/input/input2/device/coordinatey
+
+    #+ vincent.hwang 2018.08.20 [#12284] For JEITA (Battery test tool)
+    chown system system /sys/module/msm_thermal/core_control/batt_test_enabled
+    chmod 0660 /sys/module/msm_thermal/core_control/batt_test_enabled
+    chown system system /sys/devices/soc/a000000.qcom,wcnss-wlan/wlan_disable_scan
+    chmod 0660 /sys/devices/soc/a000000.qcom,wcnss-wlan/wlan_disable_scan
+    chown system system /sys/class/power_supply/bq27542_bms/disable_remap
+    chmod 0660 /sys/class/power_supply/bq27542_bms/disable_remap
+    #- vincent.hwang 2018.08.20 [#12284] For JEITA (Battery test tool)
+
+    #++(2023.02.08 Richard.Yoo)
+    #[#23021] Attempts to enter Hotswap before unlocking the lock screen after reboot
+    #- Add function to shutdown if Hotswap is triggered before bootcompleted same as DT-X450.
+    #- Added to check hotswap status again after system ready and shutdown if Hotswap is triggered.
+    #  | To handle the case where the battery is removed before Service is activated.
+    chown system system /sys/class/power_supply/hot_swap/hot_swap_recheck
+    chmod 0666 /sys/class/power_supply/hot_swap/hot_swap_recheck
+    #--(2023.02.08 Richard.Yoo)
+
+service wcnss-service /system/vendor/bin/wcnss_service
+    class main
+    user system
+    group system wifi radio
+    oneshot
+
+service ppd /system/vendor/bin/mm-pp-dpps
+    class late_start
+    disabled
+    user system
+    socket pps stream 0660 system system
+    group system graphics
+
+service per_mgr /system/vendor/bin/pm-service
+    class core
+    user system
+    group system
+
+on property:init.svc.surfaceflinger=stopped
+    stop ppd
+
+on property:init.svc.surfaceflinger=running
+    start ppd
+
+service imsstarter /vendor/bin/init.qti.ims.sh
+    class main
+    oneshot
+
+on property:vold.decrypt=trigger_restart_framework
+    start imsstarter
+
+service imsqmidaemon /system/vendor/bin/imsqmidaemon
+    class main
+    user system
+    socket ims_qmid stream 0660 system radio
+    group radio log diag
+    disabled
+
+on property:service.qti.ims.enabled=1
+    start imsqmidaemon
+
+service imsdatadaemon /system/vendor/bin/imsdatadaemon
+    class main
+    user system
+    socket ims_datad stream 0660 system radio
+    group system wifi radio inet log diag
+    disabled
+
+on property:vendor.ims.QMI_DAEMON_STATUS=1
+    start imsdatadaemon
+
+service ims_rtp_daemon /system/vendor/bin/ims_rtp_daemon
+   class main
+   user system
+   group radio diag log inet
+   disabled
+
+service vendor.imsrcsservice /system/vendor/bin/imsrcsd
+   class main
+   user system
+   group radio diag inet log
+   disabled
+
+on property:vendor.ims.DATA_DAEMON_STATUS=1
+    start ims_rtp_daemon
+    start vendor.imsrcsservice
+
+service touch /system/bin/sh /system/etc/init.qti.synaptics_dsx_qhd.sh
+   class late_start
+   user root
+   group root
+   oneshot
+   disabled
+service dts_configurator /system/vendor/bin/dts_configurator
+   class main
+   user system
+   group system
+   oneshot
+on property:persist.sys.synaptics_dsx.qhd=true
+   start touch
+
+on property:persist.sys.synaptics_dsx.qhd=false
+   stop touch
+
+service tctd /system/bin/tctd
+  class core
+  socket tctd stream 0666 root root
+  seclabel u:r:tctd:s0
+
+service tct_diag /system/bin/tct_diag
+  class late_start
+  user root
+  group root
+
+service nvdiag_daemon /system/bin/nvdiag_daemon
+   class late_start
+   user root
+   group root
+
+service set_acdb_version /vendor/bin/set_acdb_version
+   class late_start
+   user root
+   group root
+   oneshot
+
+service DTX400logger /system/bin/sh /system/xbin/DTX400logger
+   class main
+   user root
+   group log
+   seclabel u:r:plogd:s0
+   oneshot
+
+#[Begin] Add by liyan@t2mobile.com, 2018-08-15, workaround by QC to fix modem log too much issue
+service per_mgr /system/vendor/bin/pm-service
+   class core
+   user system
+   group system net_raw
+#[End] Add by liyan@t2mobile.com, 2018-08-15, workaround by QC to fix modem log too much issue

@@ -1,0 +1,111 @@
+on post-fs-data
+# create directory for ProgramButtons app by james.jo
+	mkdir /data/system/devices 0755 system system
+	chown system system /data/system/devices
+	mkdir /data/system/devices/keychars 0755 system system
+	chown system system /data/system/devices/keychars
+
+# change permissions for MSR by vincent.hwang
+    chmod 0664 /dev/msr_spidev
+    chown system system /dev/msr_spidev
+
+# change permissions for mfg by vincent.hwang
+    chmod 0660 /dev/block/mmcblk0p4
+    chown system root /dev/block/mmcblk0p4
+
+# change permissions for bootlogo changer by vincent.hwang
+    chmod 0660 /dev/block/mmcblk0p29
+    chown system system /dev/block/mmcblk0p29
+
+# change permissions for wifi detail settings by vincent.hwang
+    chmod 0664 /data/misc/wifi/WCNSS_qcom_cfg.ini
+    chown system wifi /data/misc/wifi/WCNSS_qcom_cfg.ini
+
+# change permissions for vibrate intensity settings by vincent.hwang
+    chmod 0664 /sys/class/timed_output/vibrator/level
+    chown system system /sys/class/timed_output/vibrator/level
+
+# change permissions for board_id_detect by james.jo
+	chmod 0666 /sys/info/settings
+	chown system system /sys/info/settings
+	chmod 0444 /sys/info/has_imager
+	chown system system /sys/info/has_imager
+	chmod 0666 /sys/info/cam_lock
+	chown system system /sys/info/cam_lock
+    chmod 0666 /sys/info/batt_critical
+    chown system system /sys/info/batt_critical
+
+# implement to read mfg block in kernel
+	chmod 0660 /sys/info/mfg
+	chown system system /sys/info/mfg
+
+# change permissions for n4313 scanner
+	chmod 0660          /dev/ttyHS0
+	chown system system /dev/ttyHS0
+    chmod 0660          /sys/kernel/debug/msm_serial_hs/loopback.0
+    chown system system /sys/kernel/debug/msm_serial_hs/loopback.0
+	chmod 0660          /sys/bus/platform/drivers/msm_serial_hs/78b0000.uart/power/autosuspend_delay_ms
+	chown system system /sys/bus/platform/drivers/msm_serial_hs/78b0000.uart/power/autosuspend_delay_ms
+	chmod 0660          /dev/scanner-kernel-1d
+	chown system system /dev/scanner-kernel-1d
+
+# // [JIN-180710+] : use for HSM scanner.
+	chmod 0660 /sys/n5600/camid
+	chown root system /sys/n5600/camid
+# // [JIN-180710-]
+
+# // [JIN-171012+] : use for SE47XX scanner.
+	chmod 0660 /sys/se47xx/camid
+	chown root system /sys/se47xx/camid
+	chmod 0666 /sys/se47xx/camstatus
+	chown root system /sys/se47xx/camstatus
+	chmod 0666 /sys/se47xx/is_scan_mode
+	chown root system /sys/se47xx/is_scan_mode
+# // [JIN-171012-]
+
+# Added for application backup and restore
+    chmod 0770 /data/cache/backup_stage
+    chown system cache /data/cache/backup_stage
+
+# START 20180326 tommy.kim [#11895] Implemented LogTrace
+service lt_diag_mdlog /vendor/bin/diag_mdlog -o /storage/emulated/0/LogTrace/qxdm -c
+    class late_start
+    oneshot
+    disabled
+    user root
+    group root system log qcom_diag net_raw
+    seclabel u:r:diag:s0
+
+service lt_kill_dm /vendor/bin/diag_mdlog -k
+    class late_start
+    oneshot
+    disabled
+    user root
+    group root system log qcom_diag net_raw
+    seclabel u:r:diag:s0
+
+# 20181001 tommy.kim [#13122] Restart tcpdump.sh when tcpdump is crashed
+service tcpdump /system/bin/sh /vendor/etc/tcpdump.sh
+    class late_start
+    disabled
+    user root
+    group root system log net_raw
+    seclabel u:r:tcpdump:s0
+
+service wifi_logger /vendor/bin/WifiLogger_app -o 3 -p /sdcard/LogTrace/wlan/
+    class late_start
+    oneshot
+    disabled
+    user root
+    seclabel u:r:wcnss_service:s0
+
+service reload_release /system/bin/sh /vendor/etc/reload.sh release
+    disabled
+    oneshot
+    seclabel u:r:tcpdump:s0
+
+service reload_debug /system/bin/sh /vendor/etc/reload.sh debug
+    disabled
+    oneshot
+    seclabel u:r:tcpdump:s0
+# END 20181001 tommy.kim [#13122] Implemented LogTrace
