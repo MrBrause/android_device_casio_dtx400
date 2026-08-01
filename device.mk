@@ -4,6 +4,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# device.mk (a product makefile) configures the software payload — it's evaluated in the product namespace and
+# answers "what ships in the images and how does the OS behave": PRODUCT_PACKAGES (which apps/HALs/daemons get installed —
+# your RemovePackages hook), PRODUCT_COPY_FILES (keylayouts, feature XMLs, configs), PRODUCT_PROPERTY_OVERRIDES (system properties),
+# inherit-product chains (full_base.mk, wifionly.mk — that whole recent episode was pure product-side). Variables here are PRODUCT_*,
+# and changing them means different contents, same packaging.
+
 # API levels
 PRODUCT_SHIPPING_API_LEVEL := 27
 

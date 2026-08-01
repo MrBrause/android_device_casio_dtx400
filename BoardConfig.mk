@@ -4,6 +4,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# BoardConfig.mk configures the build system itself (and is consumed by make, not installed anywhere).
+# It answers "how do I build and package for this hardware": target arch and CPU variant, partition sizes and filesystem types,
+# kernel source path/defconfig/cmdline (BOARD_KERNEL_CMDLINE — our old friend), what goes into boot.img, SELinux policy dirs,
+# HAL build flags (BOARD_WLAN_DEVICE, TARGET_USES_...). Variables here are mostly TARGET_* and BOARD_*,
+# and changing them typically means the images are built differently.
+
 DEVICE_PATH := device/casio/dtx400
 
 # Architecture
