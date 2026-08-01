@@ -25,45 +25,30 @@ PRODUCT_ENFORCE_RRO_TARGETS := *
 # Product characteristics
 PRODUCT_CHARACTERISTICS := default
 
-# Rootdir
+# Init
 PRODUCT_PACKAGES += \
-    init.class_main.sh \
-    init.crda.sh \
-    init.mdm.sh \
-    init.qcom.class_core.sh \
-    init.qcom.coex.sh \
-    init.qcom.crashdata.sh \
-    init.qcom.early_boot.sh \
-    init.qcom.efs.sync.sh \
-    init.qcom.post_boot.sh \
-    init.qcom.sdio.sh \
-    init.qcom.sensors.sh \
-    init.qcom.sh \
-    init.qcom.syspart_fixup.sh \
-    init.qcom.usb.sh \
-    init.qcom.wifi.sh \
-    init.qti.fm.sh \
-    init.qti.ims.sh \
-    init.target.usb.sh \
-    qca6234-service.sh \
-
-PRODUCT_PACKAGES += \
-    fstab.qcom \
-    init.msm.usb.configfs.rc \
-    init.qcom.factory.rc \
-    init.qcom.rc \
-    init.qcom.usb.rc \
-    init.target.rc \
-    init.target.usb.rc \
-    init.carrier.rc \
-    init.environ.rc \
+    init \
     init.rc \
-    init.recovery.qcom.rc \
-    init.solution.rc \
-    init.usb.configfs.rc \
-    init.usb.rc \
-    init.zygote32.rc \
-    ueventd.rc \
+    toolbox
+
+# Fstab
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_RECOVERY)/root/first_stage_ramdisk/fstab.qcom \
+    $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.qcom
+
+# Scripts
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/bin/init.qcom.early_boot.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qcom.early_boot.sh \
+    $(LOCAL_PATH)/rootdir/bin/init.qcom.post_boot.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qcom.post_boot.sh
+
+# RC
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/init.qcom.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.qcom.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.target.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.target.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.solution.rc:root/init.solution.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.carrier.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.carrier.rc \
+    $(LOCAL_PATH)/rootdir/etc/ueventd.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc \
+    system/core/rootdir/init.rc:root/init.rc
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
