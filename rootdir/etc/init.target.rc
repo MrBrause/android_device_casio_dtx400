@@ -70,7 +70,7 @@ on fs
     wait /dev/block/bootdevice/by-name/oempersist
     mount ext4 /dev/block/bootdevice/by-name/oempersist /oempersist nosuid nodev noatime barrier=1
     restorecon_recursive /oempersist
-    chown system oempersist /oempersist
+    chown system system /oempersist
     chmod 0771 /oempersist
 #add end
 
@@ -173,7 +173,6 @@ on charger
    chmod 0664 /sys/class/power_supply/bms/current_now
    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
    start vm_bms
-   load_all_props
    start qcom-post-boot
 
 on boot
@@ -431,10 +430,3 @@ service DTX400logger /system/bin/sh /system/xbin/DTX400logger
    group log
    seclabel u:r:plogd:s0
    oneshot
-
-#[Begin] Add by liyan@t2mobile.com, 2018-08-15, workaround by QC to fix modem log too much issue
-service per_mgr /system/vendor/bin/pm-service
-   class core
-   user system
-   group system net_raw
-#[End] Add by liyan@t2mobile.com, 2018-08-15, workaround by QC to fix modem log too much issue

@@ -73,7 +73,7 @@ service lt_diag_mdlog /vendor/bin/diag_mdlog -o /storage/emulated/0/LogTrace/qxd
     oneshot
     disabled
     user root
-    group root system log qcom_diag net_raw
+    group root system log net_raw
     seclabel u:r:diag:s0
 
 service lt_kill_dm /vendor/bin/diag_mdlog -k
@@ -81,7 +81,7 @@ service lt_kill_dm /vendor/bin/diag_mdlog -k
     oneshot
     disabled
     user root
-    group root system log qcom_diag net_raw
+    group root system log net_raw
     seclabel u:r:diag:s0
 
 # 20181001 tommy.kim [#13122] Restart tcpdump.sh when tcpdump is crashed
