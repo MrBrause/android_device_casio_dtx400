@@ -39,6 +39,11 @@ BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 TARGET_KERNEL_CONFIG := msm8909_defconfig
 TARGET_KERNEL_SOURCE := kernel/casio/dtx400
 
+# it is enabled per default and useful for kernel 4.14 and newer
+# disable it explicitly
+#TARGET_KERNEL_CLANG_COMPILE := true
+TARGET_KERNEL_CLANG_COMPILE := false
+
 # Kernel - prebuilt
 #TARGET_FORCE_PREBUILT_KERNEL := true
 #ifeq ($(TARGET_FORCE_PREBUILT_KERNEL),true)
