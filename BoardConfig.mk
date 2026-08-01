@@ -33,15 +33,15 @@ TARGET_NO_BOOTLOADER := true
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 androidboot.memcg=false earlyprintk loglevel=8 log_buf_len=512K buildvariant=user androidboot.abl= androidboot.bootloader=L4TAZ000TA00
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_IMAGE_NAME := Image
-TARGET_KERNEL_CONFIG := dtx400_defconfig
+BOARD_KERNEL_IMAGE_NAME := zImage-dtb
+TARGET_KERNEL_CONFIG := msm8909_defconfig
 TARGET_KERNEL_SOURCE := kernel/casio/dtx400
 
 # Kernel - prebuilt
-TARGET_FORCE_PREBUILT_KERNEL := true
-ifeq ($(TARGET_FORCE_PREBUILT_KERNEL),true)
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
-endif
+#TARGET_FORCE_PREBUILT_KERNEL := true
+#ifeq ($(TARGET_FORCE_PREBUILT_KERNEL),true)
+#TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
+#endif
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
