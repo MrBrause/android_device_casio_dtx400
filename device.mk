@@ -13,6 +13,19 @@
 # API levels
 PRODUCT_SHIPPING_API_LEVEL := 27
 
+# Pre-compile all apps at build time, not just boot image
+WITH_DEXPREOPT := true
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := false
+WITH_DEXPREOPT_DEBUG_INFO := false
+#DONT_DEXPREOPT_PREBUILTS := true
+# Change first-boot strategy to use pre-compiled odex
+PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := speed-profile
+# Dex
+PRODUCT_DEXPREOPT_SPEED_APPS += \
+    TrebuchetQuickStep \
+    Settings \
+    SystemUI
+
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl \
