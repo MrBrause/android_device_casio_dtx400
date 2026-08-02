@@ -18,7 +18,6 @@ lib/com.qualcomm.qti.ant@1.0.so
 vendor/lib/com.qualcomm.qti.ant@1.0_vendor.so
 vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so
 # Alarm
-vendor/framework/vendor.qti.hardware.alarm-V1.0-java.jar
 vendor/lib/libalarmservice_jni.so
 vendor/lib/vendor.qti.hardware.alarm@1.0.so
 # Audio
@@ -409,12 +408,10 @@ vendor/bin/dpmQmiMgr
 # Qdutils
 vendor/lib/vendor.qti.hardware.qdutils_disp@1.0_vendor.so
 # Radio
--app/QtiTelephonyService/QtiTelephonyService.apk
 etc/permissions/privapp-permissions-qti.xml
 etc/permissions/qcrilhook.xml
 etc/permissions/telephonyservice.xml
 etc/sysconfig/qti_whitelist.xml
--priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 vendor/bin/ATFWD-daemon
 vendor/bin/netmgrd
 vendor/lib/librmnetctl.so
@@ -455,13 +452,11 @@ vendor/lib/vendor.qti.hardware.radio.uim_remote_client@1.0_vendor.so
 vendor/lib/vendor.qti.hardware.radio.uim_remote_server@1.0_vendor.so
 vendor/radio/qcril_database/qcril.db
 # Radio-IMS
--app/imssettings/imssettings.apk
 lib/com.qualcomm.qti.imscmservice@1.0.so
 lib/libdiag_system.so
 lib/libimscamera_jni.so
 lib/libimsmedia_jni.so
 lib/vendor.qti.imsrtpservice@1.0.so
-vendor/framework/qti-vzw-ims-internal.jar
 vendor/lib/com.qualcomm.qti.imscmservice@1.0_vendor.so
 vendor/lib/vendor.qti.hardware.radio.ims@1.0_vendor.so
 vendor/lib/vendor.qti.hardware.radio.uim@1.1_vendor.so
@@ -476,7 +471,6 @@ vendor/lib/libsubsystem_control.so
 vendor/lib/sensor_calibrate.so
 vendor/lib/sensors.native.so
 # Sensor-calibrate
-vendor/framework/vendor.qti.hardware.sensorscalibrate-V1.0-java.jar
 vendor/lib/vendor.qti.hardware.sensorscalibrate@1.0.so
 # TUI
 vendor/lib/vendor.qti.hardware.tui_comm@1.0_vendor.so
@@ -487,7 +481,6 @@ vendor/lib/libthermalclient.so
 vendor/lib/libthermalioctl.so
 # Thermal-Hardware
 # Time
--vendor/app/TimeService/TimeService.apk
 vendor/bin/time_daemon
 vendor/lib/libtime_genoff.so
 # Touch-improve
@@ -519,6 +512,7 @@ vendor/lib/libwvhidl.so
 vendor/lib/libwms.so
 vendor/lib/libwqe.so
 vendor/bin/wcnss_service
+etc/firmware/wlan/prima/WCNSS_cfg.dat
 # rootdir
 vendor/bin/diag_mdlog
 vendor/bin/ftmdaemon
@@ -695,47 +689,3 @@ system/etc/firmware/cpp_firmware_v1_4_0.fw
 system/etc/init/dpmd.rc
 system/etc/init/init.qti.fm.rc
 system/etc/init/smcd.rc
-# Framework JARs
-system/framework/btmultisimlibrary.jar
-system/framework/cneapiclient.jar
-system/framework/com.gsma.services.nfc.jar
-system/framework/com.nxp.nfc.jar
-system/framework/com.qti.dpmframework.jar
-system/framework/com.qti.location.sdk.jar
-system/framework/com.qti.snapdragon.sdk.display.jar
-system/framework/com.qualcomm.qti.camera.jar
-system/framework/com.qualcomm.qti.imscmservice@1.0-java.jar
-system/framework/com.qualcomm.qti.imscmservice@1.1-java.jar
-system/framework/com.quicinc.cne.api-V1.0-java.jar
-system/framework/com.quicinc.cne.jar
-system/framework/device.internal.jar
-system/framework/device.jni.jar
-system/framework/device.sdk.casio.jar
-system/framework/device.sdk.jar
-system/framework/device.server.jar
-system/framework/dpmapi.jar
-system/framework/dpm.jar
-system/framework/embmslibrary.jar
-system/framework/ims-common.jar
-system/framework/izat.xt.srv.jar
-system/framework/oem-services.jar
-system/framework/org.simalliance.openmobileapi.jar
-system/framework/qcmediaplayer.jar
-system/framework/qcom.fmradio.jar
-system/framework/qcrilhook.jar
-system/framework/qmapbridge.jar
-system/framework/QPerformance.jar
-system/framework/qti-telephony-common.jar
-system/framework/QtiTelephonyServicelibrary.jar
-system/framework/rcs_service_aidl.jar
-system/framework/rcs_service_api.jar
-system/framework/sysrilcmd.jar
-system/framework/tcmclient.jar
-system/framework/tcmiface.jar
-system/framework/telephony-ext.jar
-system/framework/uimlpalibrary.jar
-system/framework/uimremotesimlocklibrary.jar
-system/framework/uimservicelibrary.jar
-system/framework/vendor.qti.hardware.fingerprint-V1.0-java.jar
-vendor/framework/vendor.qti.hardware.factory-V1.0-java.jar
-etc/firmware/wlan/prima/WCNSS_cfg.dat
