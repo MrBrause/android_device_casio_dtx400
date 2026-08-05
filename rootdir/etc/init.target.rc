@@ -339,6 +339,7 @@ service per_mgr /system/vendor/bin/pm-service
     class core
     user system
     group system
+    disabled
 
 on property:init.svc.surfaceflinger=stopped
     stop ppd
