@@ -32,12 +32,20 @@ TARGET_BOOTLOADER_BOARD_NAME := dtx400
 TARGET_NO_BOOTLOADER := true
 
 # Kernel
+TARGET_KERNEL_ARCH := arm
+TARGET_KERNEL_HEADER_ARCH := arm
+TARGET_KERNEL_VERSION := 3.18
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 androidboot.memcg=false earlyprintk loglevel=8 log_buf_len=512K buildvariant=user androidboot.abl= androidboot.bootloader=L4TAZ000TA00
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 TARGET_KERNEL_CONFIG := msm8909_defconfig
 TARGET_KERNEL_SOURCE := kernel/casio/dtx400
+
+# Kernel Toolchain
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
+KERNEL_TOOLCHAIN_PREFIX := arm-linux-androideabi-
+KERNEL_TOOLCHAIN := $(shell pwd)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-linux-androideabi-4.9/bin
 
 # it is enabled per default and useful for kernel 4.14 and newer
 # disable it explicitly
