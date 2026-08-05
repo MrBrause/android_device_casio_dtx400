@@ -31,12 +31,33 @@ OVERRIDE_TARGET_FLATTEN_APEX := true
 TARGET_BOOTLOADER_BOARD_NAME := dtx400
 TARGET_NO_BOOTLOADER := true
 
+# cmdline from bootloader, read via LK2ND
+# androidboot.bootdevice=7824900.sdhci androidboot.verifiedbootstate=orange androidboot.veritymode=enforcing
+# androidboot.keymaster=1 androidboot.safemode=0 androidboot.uartflag=0 androidboot.admin.root=0 androidboot.shortcode=1XL androidboot.serialno=MQ1C00557LA058
+# androidboot.baseband=apq mdss_mdp3.panel=1:dsi:0:qcom,mdss_dsi_st7701s_wvga_video:1:none:cfg:single_dsi
+
+# cmdline from stock OS
+# sched_enable_hmp=1 console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci
+# lpm_levels.sleep_disabled=1 androidboot.memcg=false earlyprintk loglevel=8 log_buf_len=512K buildvariant=user androidboot.abl= androidboot.bootloader=L4TAZ000TA00
+
 # Kernel
 TARGET_KERNEL_ARCH := arm
 TARGET_KERNEL_HEADER_ARCH := arm
 TARGET_KERNEL_VERSION := 3.18
 BOARD_KERNEL_BASE := 0x80000000
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 androidboot.memcg=false earlyprintk loglevel=8 log_buf_len=512K buildvariant=user androidboot.abl= androidboot.bootloader=L4TAZ000TA00
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8
+BOARD_KERNEL_CMDLINE += androidboot.console=ttyHSL0
+BOARD_KERNEL_CMDLINE += androidboot.hardware=qcom
+BOARD_KERNEL_CMDLINE += androidboot.fstab_suffix=qcom
+BOARD_KERNEL_CMDLINE += clk_ignore_unused
+BOARD_KERNEL_CMDLINE += androidboot.memcg=false
+BOARD_KERNEL_CMDLINE += log_buf_len=4M earlyprintk=android
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive enforcing=0
+BOARD_KERNEL_CMDLINE += cgroup_disable=cpuacct
+BOARD_KERNEL_CMDLINE += loglevel=7
+BOARD_KERNEL_CMDLINE += ignore_loglevel
+BOARD_KERNEL_CMDLINE += ehci-hcd.park=3
+BOARD_KERNEL_CMDLINE += lpm_levels.sleep_disabled=1
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 TARGET_KERNEL_CONFIG := msm8909_defconfig
