@@ -79,6 +79,10 @@ TARGET_KERNEL_CLANG_COMPILE := false
 #TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
 #endif
 
+# Metadata
+# create /metadata mountpoint in the ramdisk, fstab entry is also needed
+BOARD_USES_METADATA_PARTITION := true
+
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432

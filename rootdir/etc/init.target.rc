@@ -44,7 +44,7 @@ on early-init
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-    mount_all /vendor/etc/fstab.qcom
+    mount_all /vendor/etc/fstab.qcom --early
     write /proc/sys/vm/swappiness 100
 
     # Keeping following partitions outside fstab file. As user may not have
@@ -78,6 +78,9 @@ on fs
     #[FEATURE]-Add-BEGIN by T2M.jiaming.ding, 2018-05-30,[Task6359501]BT test mode
     chown system system /persist/wl
     #[FEATURE]-Add-END by T2M.jiaming.ding
+
+on late-fs
+    mount_all /vendor/etc/fstab.qcom --late
 
 on post-fs-data
     mkdir /data/tombstones 0771 system system

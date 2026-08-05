@@ -1,5 +1,16 @@
-/dev/block/bootdevice/by-name/userdata       /data                ext4     nosuid,noatime,nodev,barrier=1,noauto_da_alloc,discard     wait,check,encryptable=footer,quota
-/devices/soc/7864900.sdhci/mmc_host*         /storage/sdcard1     vfat     nosuid,nodev         wait,voldmanaged=sdcard1:auto,noemulatedsd,encryptable=footer
-/dev/block/bootdevice/by-name/config         /frp                 emmc     defaults          defaults
-/dev/block/bootdevice/by-name/misc           /misc                emmc     defaults          defaults
-/devices/soc/78d9000.usb/msm_hsusb_host*     /storage/usbotg      vfat     nosuid,nodev         wait,encryptable=footer,voldmanaged=usbotg:auto
+# Android fstab file.
+#<src>                                                  <mnt_point> <type>  <mnt_flags and options>                                <fs_mgr_flags>
+#/system and vendor are getting mounted by setting in device-tree DTS and system is later mounted as system-as-root triggered by bootloader
+#/dev/block/platform/soc/7824900.sdhci/by-name/system    /system     ext4    ro,barrier=1                                           wait,first_stage_mount
+#/dev/block/platform/soc/7824900.sdhci/by-name/vendor    /vendor     ext4    ro,barrier=1,discard                                   wait,first_stage_mount
+/dev/block/platform/soc/7824900.sdhci/by-name/userdata  /data       ext4    rw,noatime,nosuid,nodev,barrier=1,data=ordered,noauto_da_alloc wait,formattable,latemount
+#/cache /persist /firmware are getting mounted inside init.target.rc
+#/dev/block/bootdevice/by-name/cache     /cache      ext4    noatime,nosuid,nodev,barrier=1                         wait
+#/dev/block/bootdevice/by-name/persist   /persist    ext4    noatime,nosuid,nodev,barrier=1                         wait
+#/dev/block/bootdevice/by-name/modem     /firmware   vfat    ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337 wait
+#device has no metadata parition, so satisfy boot process by mounting oem as /metadata
+/dev/block/platform/soc/7824900.sdhci/by-name/oem       /metadata   ext4    noatime,nosuid,nodev,barrier=1                         wait,formattable
+/dev/block/platform/soc/7824900.sdhci/by-name/config    /frp        emmc    defaults                                               defaults
+/dev/block/platform/soc/7824900.sdhci/by-name/misc      /misc       emmc    defaults                                               defaults
+/devices/soc/7864900.sdhci/mmc_host*                    /storage/sdcard1   vfat  nosuid,nodev  wait,voldmanaged=sdcard1:auto,noemulatedsd
+/devices/soc/78d9000.usb/msm_hsusb_host*                /storage/usbotg    vfat  nosuid,nodev  wait,voldmanaged=usbotg:auto
