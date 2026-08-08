@@ -95,6 +95,26 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 10853243392 #16K reserved for possible enc
 # Platform
 TARGET_BOARD_PLATFORM := msm8909
 
+# Graphics
+# Force system allocation frameworks to use Mapper 2.0 compatibility layers
+USE_LEGACY_GRALLOC := true
+TARGET_USES_OLD_M_DOMAINS := true
+
+# Force compatibility with older Gralloc 1 / Mapper 2 architectures
+# Disable modern HIDL/AIDL Mapper 4.0 enforcement loops
+TARGET_USES_GRALLOC1 := true
+TARGET_USES_ION := true
+
+# Disable modern rendering options that your MSM8909 GPU/Kernel cannot parse
+TARGET_USES_VULKAN := false
+TARGET_NOT_HAVE_YUV_AVC_RGB := true
+
+# Disable modern Gralloc 3/4 binders entirely
+TARGET_USES_GRALLOC4 := false
+TARGET_USES_DRM_PP := false
+
+TARGET_USES_HWC2 := true
+
 # Properties
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop

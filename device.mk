@@ -10,6 +10,8 @@
 # inherit-product chains (full_base.mk, wifionly.mk — that whole recent episode was pure product-side). Variables here are PRODUCT_*,
 # and changing them means different contents, same packaging.
 
+LOCAL_PATH := device/casio/dtx400
+
 # API levels
 PRODUCT_SHIPPING_API_LEVEL := 27
 
@@ -25,6 +27,32 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
     TrebuchetQuickStep \
     Settings \
     SystemUI
+
+# Graphics
+PRODUCT_PACKAGES += \
+    libqdutils \
+    libqdMetaData \
+    libqdMetaData.system \
+    libmemalloc \
+    libqservice \
+    libgrallocutils \
+    gralloc.msm8909 \
+    hwcomposer.msm8909
+
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.composer@2.1-service
+
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@2.0-service \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.mapper@2.0-impl
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.hwcomposer=msm8909
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/android.hardware.graphics.composer@2.1-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.graphics.composer@2.1-service.rc \
+    $(LOCAL_PATH)/rootdir/etc/android.hardware.graphics.allocator@2.0-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.graphics.allocator@2.0-service.rc
 
 # Health
 PRODUCT_PACKAGES += \
