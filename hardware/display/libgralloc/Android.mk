@@ -15,6 +15,8 @@
 # Gralloc module
 LOCAL_PATH := $(call my-dir)
 include $(LOCAL_PATH)/../common.mk
+
+ifneq ($(TARGET_USES_GRALLOC1),true)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE                  := gralloc.$(TARGET_BOARD_PLATFORM)
@@ -28,6 +30,7 @@ LOCAL_HEADER_LIBRARIES        := generated_kernel_headers display_headers
 LOCAL_SRC_FILES               := gpu.cpp gralloc.cpp framebuffer.cpp mapper.cpp
 
 include $(BUILD_SHARED_LIBRARY)
+endif
 
 # MemAlloc Library
 include $(CLEAR_VARS)

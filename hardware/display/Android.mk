@@ -26,6 +26,7 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := \
 
 ifeq ($(TARGET_USES_GRALLOC1), true)
     LOCAL_EXPORT_C_INCLUDE_DIRS += $(display_top)/libgralloc1
+    LOCAL_EXPORT_C_INCLUDE_DIRS += $(display_top)/libgralloc
 else
     LOCAL_EXPORT_C_INCLUDE_DIRS += $(display_top)/libgralloc
 endif

@@ -13,6 +13,8 @@
 DEVICE_PATH := device/casio/dtx400
 
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
+BUILD_BROKEN_DUP_RULES := true
 
 # Architecture
 TARGET_ARCH := arm
@@ -72,6 +74,13 @@ KERNEL_TOOLCHAIN := $(shell pwd)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-linux-andr
 # disable it explicitly
 #TARGET_KERNEL_CLANG_COMPILE := true
 TARGET_KERNEL_CLANG_COMPILE := false
+
+# ensure common_deps and kernel_includes under in hardware/qcom/display/msm8909/common.mk are set
+# Tell the build system to generate headers out of your custom kernel path
+TARGET_HAS_LEGACY_QSGI := true
+TARGET_COMPILE_WITH_MSM_KERNEL := true
+PRODUCT_SOONG_NAMESPACES += \
+    kernel/casio/dtx400
 
 # Kernel - prebuilt
 #TARGET_FORCE_PREBUILT_KERNEL := true
