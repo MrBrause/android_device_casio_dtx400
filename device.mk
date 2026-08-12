@@ -15,6 +15,12 @@ LOCAL_PATH := device/casio/dtx400
 # API levels
 PRODUCT_SHIPPING_API_LEVEL := 27
 
+# writes logcat to /data/misc/logd/ persistently
+PRODUCT_PROPERTY_OVERRIDES += \
+    logd.logpersistd=logcatd \
+    logd.logpersistd.buffer=all \
+    logd.logpersistd.rotate_kbytes=2048
+
 # Pre-compile all apps at build time, not just boot image
 WITH_DEXPREOPT := true
 WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := false
