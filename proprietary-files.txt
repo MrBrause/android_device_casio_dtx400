@@ -165,6 +165,7 @@ vendor/lib/libsdmextension.so
 vendor/lib/libsdmutils.so
 vendor/lib/libsdm-color.so
 vendor/lib/libsdm-diag.so
+vendor/lib/libsdm-disp-vndapis.so
 vendor/lib/libdisp-aba.so
 vendor/lib/libmm-disp-apis.so
 vendor/lib/libmm-qdcm.so

@@ -1,0 +1,7 @@
+cc_library_shared {
+    name: "libhwbinder_stub",
+    stem: "libhwbinder",
+    vendor: true,
+    srcs: [],
+    compile_multilib: "32",
+}

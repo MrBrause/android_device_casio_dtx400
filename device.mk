@@ -69,6 +69,22 @@ PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl.recovery \
     android.hardware.health@2.1-service
 
+# creates an empty shared library that satisfies the linker
+# who needs entry without providing any symbols
+# the ProcessState symbols will be resolved from libhidlbase.so
+PRODUCT_PACKAGES += \
+    libhwbinder_stub
+
+PRODUCT_COPY_FILES += \
+    vendor/casio/dtx400/proprietary/vendor/lib/android.hidl.base@1.0.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hidl.base@1.0.so
+
+PRODUCT_PACKAGES += \
+    libhidltransport-shim \
+    libcompat-shim \
+    libgps-shim \
+    libwifi-shim \
+    libhwminijail
+
 # Overlays
 PRODUCT_ENFORCE_RRO_TARGETS := *
 
@@ -108,6 +124,23 @@ PRODUCT_COPY_FILES += \
 # VINTF
 PRODUCT_ENFORCE_VINTF_MANIFEST := true
 $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_o_mr1.mk)
+
+# VNDK
+PRODUCT_COPY_FILES += \
+    prebuilts/vndk/v31/arm/arch-arm-armv7-a-neon/shared/vndk-core/libbinder.so:$(TARGET_COPY_OUT_VENDOR)/lib/libbinder-v31.so \
+    prebuilts/vndk/v31/arm/arch-arm-armv7-a-neon/shared/vndk-sp/libhidlbase.so:$(TARGET_COPY_OUT_VENDOR)/lib/libhidlbase-v31.so \
+    prebuilts/vndk/v31/arm/arch-arm-armv7-a-neon/shared/vndk-sp/libutils.so:$(TARGET_COPY_OUT_VENDOR)/lib/libutils-v31.so \
+    prebuilts/vndk/v32/arm/arch-arm-armv7-a-neon/shared/vndk-sp/libutils.so:$(TARGET_COPY_OUT_VENDOR)/lib/libutils-v32.so \
+    prebuilts/vndk/v30/arm/arch-arm-armv7-a-neon/shared/vndk-sp/libhidlbase.so:$(TARGET_COPY_OUT_VENDOR)/lib/libhidlbase.so \
+    device/casio/dtx400/prebuilts/lib/libhidltransport.so:$(TARGET_COPY_OUT_VENDOR)/lib/libhidltransport.so \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-sp/libhidlmemory.so:$(TARGET_COPY_OUT_VENDOR)/lib/libhidlmemory.so \
+    prebuilts/vndk/v30/arm/arch-arm-armv7-a-neon/shared/vndk-sp/libcutils.so:$(TARGET_COPY_OUT_VENDOR)/lib/libcutils.so \
+    prebuilts/vndk/v30/arm/arch-arm-armv7-a-neon/shared/vndk-sp/libutils.so:$(TARGET_COPY_OUT_VENDOR)/lib/libutils.so \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-sp/libbase.so:$(TARGET_COPY_OUT_VENDOR)/lib/libbase.so \
+    prebuilts/vndk/v30/arm/arch-arm-armv7-a-neon/shared/vndk-sp/libc++.so:$(TARGET_COPY_OUT_VENDOR)/lib/libc++.so
+
+# VNDK
+PRODUCT_EXTRA_VNDK_VERSIONS := 30
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
