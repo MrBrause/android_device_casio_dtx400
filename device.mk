@@ -15,6 +15,9 @@ LOCAL_PATH := device/casio/dtx400
 # API levels
 PRODUCT_SHIPPING_API_LEVEL := 27
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/bpfloader_mock.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/bpfloader
+
 # writes logcat to /data/misc/logd/ persistently
 PRODUCT_PROPERTY_OVERRIDES += \
     logd.logpersistd=logcatd \
@@ -96,6 +99,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/init.carrier.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.carrier.rc \
     $(LOCAL_PATH)/rootdir/etc/ueventd.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc \
     system/core/rootdir/init.rc:root/init.rc
+
+# Profiles
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/profiles/cgroups_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
+    $(LOCAL_PATH)/profiles/task_profiles_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
 # VINTF
 PRODUCT_ENFORCE_VINTF_MANIFEST := true
