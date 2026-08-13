@@ -92,6 +92,9 @@ PRODUCT_SOONG_NAMESPACES += \
 # create /metadata mountpoint in the ramdisk, fstab entry is also needed
 BOARD_USES_METADATA_PARTITION := true
 
+# Filesystem
+BOARD_ROOT_EXTRA_FOLDERS := firmware persist
+
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
@@ -141,6 +144,19 @@ TARGET_COPY_OUT_VENDOR := vendor
 BOARD_VENDORIMAGE_PARTITION_SIZE := 524288000
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
+
+# SEpolicy
+include device/qcom/sepolicy-legacy-um/SEPolicy.mk
+
+BOARD_SEPOLICY_DIRS += \
+    $(DEVICE_PATH)/sepolicy/vendor
+
+BOARD_VENDOR_SEPOLICY_DIRS += \
+    device/qcom/sepolicy-legacy-um/legacy/vendor/common \
+    device/qcom/sepolicy-legacy-um/legacy/vendor/common/debugfs \
+    device/qcom/sepolicy-legacy-um/legacy/vendor/ssg \
+    device/qcom/sepolicy-legacy-um/legacy/vendor/test \
+    device/qcom/sepolicy-legacy-um/legacy/vendor/test/debugfs
 
 # VINTF
 DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/vintf/manifest.xml
