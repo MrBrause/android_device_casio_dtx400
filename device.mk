@@ -63,6 +63,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/android.hardware.graphics.composer@2.1-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.graphics.composer@2.1-service.rc \
     $(LOCAL_PATH)/rootdir/etc/android.hardware.graphics.allocator@2.0-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.graphics.allocator@2.0-service.rc
 
+# Fix SurfaceFlinger crash on old Adreno GPU
+# Abort message: 'Unable to generate SkImage. isTextureValid:1 dataspace:513'
+PRODUCT_PROPERTY_OVERRIDES += \
+    debug.renderengine.backend=gles \
+    service.sf.prime_shader_cache=0
+
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl \
