@@ -15,6 +15,20 @@ LOCAL_PATH := device/casio/dtx400
 # API levels
 PRODUCT_SHIPPING_API_LEVEL := 27
 
+# ADB
+PRODUCT_PROPERTY_OVERRIDES += \
+    sys.usb.state=mass_storage,adb \
+    persist.sys.usb.config=mass_storage,adb \
+    ro.debuggable=1 \
+    service.adb.root=1 \
+    ro.adb.secure=0 \
+    ro.secure=0 \
+    sys.usb.controller=msm_hsusb \
+    sys.usb.configfs=0
+
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.sys.usb.config=mass_storage,adb
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/bpfloader_mock.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/bpfloader
 
@@ -126,6 +140,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/profiles/cgroups_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
     $(LOCAL_PATH)/profiles/task_profiles_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
+
+# USB
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/init.target.usb.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.target.usb.sh \
+    $(LOCAL_PATH)/rootdir/etc/init.target.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.target.usb.rc
 
 # VINTF
 PRODUCT_ENFORCE_VINTF_MANIFEST := true
