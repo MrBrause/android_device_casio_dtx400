@@ -29,6 +29,61 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_VENDOR_PROPERTIES += \
     persist.sys.usb.config=mass_storage,adb
 
+# Audio
+PRODUCT_PACKAGES += \
+    audio.primary.msm8909 \
+    android.hardware.soundtrigger@2.0-impl
+
+PRODUCT_PACKAGES += \
+    android.hardware.audio@2.0-impl \
+    android.hardware.audio.effect@2.0-impl
+
+# libs were created but not copied to the needed location
+PRODUCT_COPY_FILES += \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-core/android.hardware.audio.common@2.0.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.audio.common@2.0.so \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-core/android.hardware.broadcastradio@1.0.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.broadcastradio@1.0.so \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-core/android.hardware.broadcastradio@1.1.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.broadcastradio@1.1.so \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-core/android.hardware.soundtrigger@2.0.so:$(TARGET_COPY_OUT_VENDOR)/lib/android.hardware.soundtrigger@2.0.so
+
+# override AOSP audio service with the one from stock
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/audio-hal-2-0.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.audio.service.rc
+
+# libaudioroute from VNDK v28 prebuilts for legacy audio HAL
+PRODUCT_COPY_FILES += \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-core/libaudioroute.so:$(TARGET_COPY_OUT_VENDOR)/lib/libaudioroute.so
+
+# for VNDK libs, the correct approach is to pull from the VNDK v28 prebuilts
+PRODUCT_COPY_FILES += \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-core/libaudioutils.so:$(TARGET_COPY_OUT_VENDOR)/lib/libaudioutils.so \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-core/libtinyalsa.so:$(TARGET_COPY_OUT_VENDOR)/lib/libtinyalsa.so \
+    prebuilts/vndk/v28/arm/arch-arm-armv7-a-neon/shared/vndk-core/libexpat.so:$(TARGET_COPY_OUT_VENDOR)/lib/libexpat.so
+
+# audio policy configs and mixer paths also needed to start HAL
+PRODUCT_COPY_FILES += \
+    vendor/casio/dtx400/proprietary/vendor/etc/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/audio_policy_configuration.xml \
+    vendor/casio/dtx400/proprietary/vendor/etc/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    vendor/casio/dtx400/proprietary/vendor/etc/audio_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy.conf \
+    vendor/casio/dtx400/proprietary/vendor/etc/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
+    vendor/casio/dtx400/proprietary/vendor/etc/audio_effects.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.conf \
+    vendor/casio/dtx400/proprietary/vendor/etc/audio_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_platform_info.xml \
+    vendor/casio/dtx400/proprietary/vendor/etc/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
+    vendor/casio/dtx400/proprietary/vendor/etc/mixer_paths_msm8909_pm8916.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_msm8909_pm8916.xml \
+    frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml
+
+# the mixer_paths.xml is the default fallback, but mixer_paths_msm8909_pm8916.xml seems to be the right one, as it comes from Stock
+#PRODUCT_COPY_FILES += \
+#    vendor/casio/dtx400/proprietary/vendor/etc/mixer_paths_qrd_skut.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_qrd_skut.xml \
+#    vendor/casio/dtx400/proprietary/vendor/etc/mixer_paths_wcd9326_i2s.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_wcd9326_i2s.xml \
+#    vendor/casio/dtx400/proprietary/vendor/etc/mixer_paths_skuc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_skuc.xml \
+#    vendor/casio/dtx400/proprietary/vendor/etc/mixer_paths_qrd_skuh.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_qrd_skuh.xml \
+#    vendor/casio/dtx400/proprietary/vendor/etc/mixer_paths_skua.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_skua.xml \
+#    vendor/casio/dtx400/proprietary/vendor/etc/mixer_paths_skue.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_skue.xml \
+#    vendor/casio/dtx400/proprietary/vendor/etc/mixer_paths_qrd_skui.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_qrd_skui.xml
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/bpfloader_mock.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/bpfloader
 

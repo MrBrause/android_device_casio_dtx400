@@ -56,8 +56,6 @@ vendor/etc/acdbdata/QRD/QRD_Handset_cal.acdb
 vendor/etc/acdbdata/QRD/QRD_Hdmi_cal.acdb
 vendor/etc/acdbdata/QRD/QRD_Headset_cal.acdb
 vendor/etc/acdbdata/QRD/QRD_Speaker_cal.acdb
-# Audio-Hardware
-vendor/lib/hw/audio.primary.msm8909.so
 # Bluetooth
 vendor/bin/btnvtool
 vendor/bin/hci_qcomm_init
@@ -313,7 +311,6 @@ vendor/lib/hw/keystore.msm8909.so
 lib/vendor.qti.hardware.data.latency@1.0.so
 vendor/lib/vendor.qti.hardware.data.latency@1.0_vendor.so
 # Listen
-vendor/lib/hw/sound_trigger.primary.msm8909.so
 vendor/lib/libadpcmdec.so
 vendor/lib/libsmwrapper.so
 # Media
