@@ -155,6 +155,9 @@ vendor/lib/vendor.qti.hardware.qteeconnector@1.0_vendor.so
 vendor/etc/init/vendor.display.color@1.0-service.rc
 vendor/bin/hw/vendor.display.color@1.0-service
 vendor/lib/hw/memtrack.msm8909.so
+vendor/bin/hw/android.hardware.memtrack@1.0-service
+vendor/etc/init/android.hardware.memtrack@1.0-service.rc
+vendor/lib/hw/android.hardware.memtrack@1.0-impl.so
 vendor/lib/libdrm.so
 vendor/lib/libdrmutils.so
 vendor/lib/libgpu_tonemapper.so
@@ -387,6 +390,10 @@ vendor/lib/libperipheral_client.so
 # Postprocessing
 # Power-Hardware
 vendor/lib/hw/power.qcom.so
+vendor/bin/hw/android.hardware.power@1.0-service
+vendor/etc/init/android.hardware.power@1.0-service.rc
+vendor/lib/hw/android.hardware.power@1.0-impl.so
+vendor/lib/hw/power.default.so
 # QMI
 etc/permissions/qti_libpermissions.xml
 etc/permissions/qti_permissions.xml
@@ -501,6 +508,11 @@ vendor/lib/libhbtpfrmwk.so
 # UBWC
 vendor/lib/libstreamparser.so
 vendor/lib/libUBWC.so
+# Vibrator
+vendor/bin/hw/android.hardware.vibrator@1.0-service
+vendor/etc/init/android.hardware.vibrator@1.0-service.rc
+vendor/lib/hw/android.hardware.vibrator@1.0-impl.so
+vendor/lib/hw/vibrator.default.so
 # Voice
 vendor/lib/vendor.qti.voiceprint@1.0.so
 # WiFi
