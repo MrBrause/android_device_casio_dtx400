@@ -231,7 +231,8 @@ bool FBUpdateNonSplit::draw(hwc_context_t *ctx, private_handle_t *hnd)
     overlay::Overlay& ov = *(ctx->mOverlay);
     ovutils::eDest dest = mDest;
     int fd = hnd->fd;
-    uint32_t offset = (uint32_t)hnd->offset;
+    //MDP3 IOMMU mapping already positions buffer correctly; gralloc internal offset must not be applied
+    uint32_t offset = 0;
     if(mRot) {
         if(!mRot->queueBuffer(fd, offset))
             return false;
