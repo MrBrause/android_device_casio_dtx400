@@ -30,6 +30,8 @@ PRODUCT_VENDOR_PROPERTIES += \
     persist.sys.usb.config=mass_storage,adb
 
 # Audio
+TARGET_EXCLUDES_AUDIOFX := true
+
 PRODUCT_PACKAGES += \
     audio.primary.msm8909 \
     android.hardware.soundtrigger@2.0-impl
