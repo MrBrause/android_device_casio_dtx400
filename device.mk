@@ -138,6 +138,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.renderengine.backend=gles \
     service.sf.prime_shader_cache=0
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.gralloc=msm8909 \
+    ro.hardware.egl=adreno \
+    debug.sf.hw=0 \
+
+# Disable Vulkan
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.graphics.vulkan.disable=true \
+    ro.opengles.version=196608
+
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl \
