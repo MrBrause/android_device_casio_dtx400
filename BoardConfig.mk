@@ -161,6 +161,32 @@ BOARD_VENDOR_SEPOLICY_DIRS += \
     device/qcom/sepolicy-legacy-um/legacy/vendor/test \
     device/qcom/sepolicy-legacy-um/legacy/vendor/test/debugfs
 
+# Wifi
+# Route LineageOS WLAN HAL path to the legacy (prima-era) tree
+USE_DEVICE_SPECIFIC_WLAN := true
+DEVICE_SPECIFIC_WLAN_PATH := hardware/qcom/wlan/legacy
+
+# WLAN device + supplicant/hostapd
+BOARD_WLAN_DEVICE := qcwcn
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
+# REMOVE — prima is single-firmware; fwpath write fails (root-owned) and isn't needed:
+#WIFI_DRIVER_FW_PATH_STA := "sta"
+#WIFI_DRIVER_FW_PATH_AP := "ap"
+
+# HAL loads module on wifi-enable
+WIFI_DRIVER_MODULE_PATH := "/vendor/lib/modules/wlan.ko"
+WIFI_DRIVER_MODULE_NAME := "wlan"
+
+# We ship our own AIDL supplicant init .rc (copied in device.mk) and VINTF
+# fragment. Setting the following instead makes the wpa_supplicant build
+# install its own aidl .rc + VINTF fragment (external/wpa_supplicant_8,
+# .mk lines ~1827/1829). Left off to avoid a duplicate service definition.
+#WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
+
 # VINTF
 DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/vintf/manifest.xml
 DEVICE_MATRIX_FILE := $(DEVICE_PATH)/vintf/compatibility_matrix.xml

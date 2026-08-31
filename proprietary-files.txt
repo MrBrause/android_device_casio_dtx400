@@ -213,6 +213,7 @@ vendor/firmware/a530_pm4.fw
 vendor/firmware/a540_gpmu.fw2
 vendor/firmware/leia_pfp_470.fw
 vendor/firmware/leia_pm4_470.fw
+vendor/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 vendor/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 vendor/firmware/wlan/prima/WCNSS_wlan_dictionary.dat
 # GPS
@@ -520,12 +521,12 @@ vendor/lib/vendor.qti.hardware.wifi.supplicant@1.0_vendor.so
 vendor/lib/vendor.qti.hardware.wifi.supplicant@1.1_vendor.so
 vendor/lib/libwifi-hal-qcom.so
 vendor/lib/libwpa_client.so
-vendor/bin/hw/wpa_supplicant
 vendor/lib/libwvhidl.so
 vendor/lib/libwms.so
 vendor/lib/libwqe.so
 vendor/bin/wcnss_service
 etc/firmware/wlan/prima/WCNSS_cfg.dat
+vendor/etc/wifi/WCNSS_qcom_cfg.ini
 # rootdir
 vendor/bin/diag_mdlog
 vendor/bin/ftmdaemon

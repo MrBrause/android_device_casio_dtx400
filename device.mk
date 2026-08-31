@@ -214,6 +214,24 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/init.target.usb.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.target.usb.sh \
     $(LOCAL_PATH)/rootdir/etc/init.target.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.target.usb.rc
 
+# Wifi
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml
+
+PRODUCT_COPY_FILES += \
+    external/wpa_supplicant_8/wpa_supplicant/aidl/android.hardware.wifi.supplicant-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.wifi.supplicant-service.rc
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/wifi/wpa_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant.conf
+
+PRODUCT_PACKAGES += \
+    android.hardware.wifi@1.0-service \
+    libwifi-hal-ctrl \
+    hostapd \
+    android.hardware.wifi.supplicant@1.0 \
+    wpa_supplicant
+
 # VINTF
 PRODUCT_ENFORCE_VINTF_MANIFEST := true
 $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_o_mr1.mk)
