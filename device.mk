@@ -89,6 +89,18 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/bpfloader_mock.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/bpfloader
 
+# Bluetooth profiles (A13 Gabeldorsche stack reads these at BT start)
+PRODUCT_PRODUCT_PROPERTIES += \
+    bluetooth.profile.a2dp.source.enabled?=true \
+    bluetooth.profile.avrcp.target.enabled?=true \
+    bluetooth.profile.gatt.enabled?=true \
+    bluetooth.profile.hfp.ag.enabled?=true \
+    bluetooth.profile.hid.host.enabled?=true \
+    bluetooth.profile.opp.enabled?=true \
+    bluetooth.profile.pan.nap.enabled?=true \
+    bluetooth.profile.pan.panu.enabled?=true \
+    bluetooth.profile.pbap.server.enabled?=true
+
 # writes logcat to /data/misc/logd/ persistently
 PRODUCT_PROPERTY_OVERRIDES += \
     logd.logpersistd=logcatd \
