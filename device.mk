@@ -162,6 +162,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.graphics.vulkan.disable=true \
     ro.opengles.version=196608
 
+# GNSS service disabled — no GPS receiver on this SKU (see commit msg).
+# Ship a disabled .rc; keep the binary/libs for a future WC21/RIL variant.
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/vendor.qti.gnss@1.0-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/vendor.qti.gnss@1.0-service.rc
+
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl \
