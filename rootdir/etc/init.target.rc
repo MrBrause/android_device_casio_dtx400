@@ -33,14 +33,6 @@ import /init.solution.rc
 
 import init.carrier.rc
 
-on early-init
-    mkdir /firmware 0771 system system
-    mkdir /system 0777 root root
-    symlink /data/tombstones /tombstones
-#add begin, add oempersist partition, by xiaozhan.gan
-    mkdir /oempersist 0771 system system
-#add end
-
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
@@ -85,6 +77,13 @@ on fs
 on late-fs
     mount_all /vendor/etc/fstab.qcom --late
 
+service wcnss_macaddr /vendor/bin/wcnss_macaddr_setup.sh
+    class core
+    user root
+    group system wifi
+    oneshot
+    disabled
+
 # in Android 8.1, SurfaceFlinger is not disabled in its rc file
 # so class_start core animation starts it automatically
 # in Android 13 the services are mostly disabled and have to be started manually
@@ -99,6 +98,7 @@ on post-fs-data
     start surfaceflinger
     start bluetooth-1-0
     start bootanim
+    start wcnss_macaddr
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/lpass 0771 system system

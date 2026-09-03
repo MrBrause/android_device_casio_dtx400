@@ -242,6 +242,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/wifi/wpa_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant.conf
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/wcnss_macaddr_setup.sh:$(TARGET_COPY_OUT_VENDOR)/bin/wcnss_macaddr_setup.sh
+
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     libwifi-hal-ctrl \
