@@ -92,13 +92,13 @@ service wcnss_macaddr /vendor/bin/wcnss_macaddr_setup.sh
 # better start surfaceflinger here in vendor post-fs-data
 # after perform_apex_config from init.rc in system
 on post-fs-data
+    start wcnss_macaddr
     start configstore-hal-1-0
     start gralloc-2-0
     start hwcomposer-2-1
     start surfaceflinger
     start bluetooth-1-0
     start bootanim
-    start wcnss_macaddr
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/lpass 0771 system system
